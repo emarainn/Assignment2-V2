@@ -1,32 +1,36 @@
 import React, { Component } from 'react';
+import Medal from './Medal';
 
-// Country is a child of the parent component App
 class Country extends Component {
-    state = {
-        name: 'United States',
-        gold: 0,
-      }
-
-      handleClick = () => {
-        this.setState({ gold: this.state.gold + 1 })
-        
-    }
-
+  getMedalsTotal(country, medals) {
+    let sum = 0;
+    medals.forEach(medal => { sum += country[medal.name]; });
+    return sum;
+  }
   render() { 
+    const { country, medals, onIncrement, onDecrement } = this.props;
     return (
-        <div style={{marginTop: '5pc', paddingLeft: '0'}}>
-            <div style={{ fontSize:'2em' }}>
-                { this.state.name }
-            </div>
-            <div id="block_container" style={{ display: 'flex', justifyContent: 'center' }}>
-                <div id="bloc1"><p>Gold Medals: { this.state.gold }</p></div>
-                <div id="bloc2" style={{ paddingTop: '15px', paddingLeft: '15px'}}>
-                    <button onClick={ this.handleClick } type="button">+</button>
-                </div>
-            </div>
+      
+      <div className="country" style={{ marginBottom: '20px'}}>
+        <div className="name" style={{ display: 'flex', justifyContent: 'center', fontSize: '20px', paddingBottom: '5px'}}>
+          <b>{ country.name } :
+          <span className="badge" style={{ paddingLeft: '6px'}}>
+            { this.getMedalsTotal(country, medals) }
+          </span>
+          </b>
         </div>
-      );
+        { medals.map(medal =>
+          <Medal 
+            key={ medal.id } 
+            country={ country } 
+            medal={ medal } 
+            onIncrement={ onIncrement } 
+            onDecrement={ onDecrement } />
+        ) }
+      </div>
+      
+    );
   }
 }
 
-export default Country
+export default Country;
